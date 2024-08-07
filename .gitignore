@@ -1,0 +1,60 @@
+# .NET Core
+.vs/
+.vscode/
+*.csproj.user
+*.csproj.DotSettings
+*.csproj.DotSettings.user
+*- [Bb]ackup.cs
+*.user
+*.suo
+*.userosscache
+*.sln.ide
+*.pidb
+*.userprefs
+*.sln.docstates
+*.pyproj
+*.pyc
+*.pyo
+*.pdb
+*.res
+*.tsproj
+*.ssproj
+*.metadata
+*.browser
+*.manifest
+*.pfx
+*.publishsettings
+*.orig
+*.sublime-project
+*.sublime-workspace
+*.yaml.swp
+*.yml.swp
+*.code-workspace
+*.swp
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+.idea/
+.vscode/
+_VS*
+.temp
+
+# Auto-generated files
+Generated\ Files/
+bin/
+obj/
+Debug/
+Release/
+Packages/
+**/project.lock.json
+**/project.fragment.lock.json
+*.vspscc
+*.vssscc
+node_modules/
+
+# appsettings
+appsettings*.json
