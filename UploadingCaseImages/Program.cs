@@ -8,19 +8,14 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using Scrutor;
 using UploadingCaseImages.Common.Handlers;
-using UploadingCaseImages.Common.Interceptors;
 using UploadingCaseImages.DB;
 using UploadingCaseImages.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSingleton<AuditableEntityInterceptor>();
-
 builder.Services.AddDbContext<UploadingCaseImagesContext>((sp, optionBuilder) =>
 {
 	optionBuilder.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection"));
-	var auditableInterceptor = sp.GetRequiredService<AuditableEntityInterceptor>();
-	optionBuilder.AddInterceptors(auditableInterceptor);
 });
 
 // Add services to the container.
