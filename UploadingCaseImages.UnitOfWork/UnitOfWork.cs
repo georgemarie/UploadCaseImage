@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Data;
-using UploadingCaseImages.DB;
-using UploadingCaseImages.DB.Model;
-using UploadingCaseImages.Repository;
 using Microsoft.EntityFrameworkCore;
+using UploadingCaseImages.DB;
+using UploadingCaseImages.Repository;
 
 namespace UploadingCaseImages.UnitOfWorks;
 
@@ -25,7 +24,7 @@ public class UnitOfWork : IUnitOfWork
 	}
 
 	public IGenericRepository<TEntity> Repository<TEntity>()
-		where TEntity : BaseEntity
+		where TEntity : class
 	{
 		_repositories ??= [];
 

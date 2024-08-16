@@ -4,9 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UploadingCaseImages.DB.Migrations
+namespace UploadingCaseImages.DB.Model;
+internal class Class1
 {
-    internal class Class1
-    {
-    }
 }
