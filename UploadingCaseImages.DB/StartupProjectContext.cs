@@ -1,5 +1,6 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
+using UploadingCaseImages.DB.Configurations;
 
 namespace UploadingCaseImages.DB;
 
@@ -15,5 +16,6 @@ public class UploadingCaseImagesContext : DbContext
 		base.OnModelCreating(modelBuilder);
 
 		modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+		modelBuilder.ApplyConfiguration(new BodyImageConfiguration());
 	}
 }

@@ -6,7 +6,13 @@ using System.Threading.Tasks;
 
 namespace UploadingCaseImages.DB.Enums
 {
-	internal enum Class1
+	internal enum BodyPart
 	{
+		Head,
+		Arm,
+		Leg,
+		Torso,
+		Hand,
+		Foot,
 	}
 }
