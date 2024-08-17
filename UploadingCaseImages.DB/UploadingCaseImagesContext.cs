@@ -8,7 +8,7 @@ namespace UploadingCaseImages.DB;
 
 public class UploadingCaseImagesContext : DbContext
 {
-	internal DbSet<BodyImageModel> BodyImageModel { get; set; }
+	public DbSet<BodyImageModel> BodyImageModel { get; set; }
 
 	public UploadingCaseImagesContext(DbContextOptions<UploadingCaseImagesContext> options)
 		: base(options)

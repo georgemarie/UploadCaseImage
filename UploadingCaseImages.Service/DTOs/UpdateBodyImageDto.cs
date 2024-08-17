@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using UploadingCaseImages.DB.Enums;
 
-namespace UploadingCaseImages.DB.Model;
-public class BodyImageModel
+namespace UploadingCaseImages.Service.DTOs;
+public class UpdateBodyImageDto
 {
 	public int Id { get; set; }
 	public string ImagePath { get; set; }

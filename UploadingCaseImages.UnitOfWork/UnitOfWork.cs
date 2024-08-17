@@ -11,7 +11,10 @@ public class UnitOfWork : IUnitOfWork
 	private readonly UploadingCaseImagesContext _context;
 	private Hashtable _repositories;
 
-	public UnitOfWork(UploadingCaseImagesContext context) => _context = context;
+	public UnitOfWork(UploadingCaseImagesContext context)
+	{
+		_context = context;
+	}
 
 	public async Task<int> SaveChanges()
 	{

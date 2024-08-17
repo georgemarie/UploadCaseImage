@@ -9,7 +9,7 @@ using UploadingCaseImages.DB.Model;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace UploadingCaseImages.DB.Configurations;
-internal class BodyImageConfiguration : IEntityTypeConfiguration<BodyImageModel>
+public class BodyImageConfiguration : IEntityTypeConfiguration<BodyImageModel>
 {
 	public void Configure(EntityTypeBuilder<BodyImageModel> builder)
 	{
@@ -17,7 +17,8 @@ internal class BodyImageConfiguration : IEntityTypeConfiguration<BodyImageModel>
 			   .IsRequired();
 
 		builder.Property(image => image.ImagePath)
-			   .IsRequired();
+			   .IsRequired()
+				.HasMaxLength(256);
 
 		builder.Property(image => image.BodyPart)
 			   .IsRequired();
