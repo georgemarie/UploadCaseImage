@@ -17,6 +17,15 @@ builder.Services.AddDbContext<UploadingCaseImagesContext>((sp, optionBuilder) =>
 {
 	optionBuilder.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection"));
 });
+builder.Services.AddDbContext<UploadingCaseImagesContext>(options =>
+    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<ICaseService, CaseService>();
+
+builder.Services.AddDbContext<UploadingCaseImagesContext>(options =>
+	options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IAnatomyService, AnatomyService>();
 
 // Add services to the container.
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
