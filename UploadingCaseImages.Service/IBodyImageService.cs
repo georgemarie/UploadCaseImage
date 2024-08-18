@@ -1,24 +1,18 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using UploadingCaseImages.DB.Enums;
-using UploadingCaseImages.DB.Model;
 using UploadingCaseImages.Service.DTOs;
-using static System.Net.Mime.MediaTypeNames;
+using UploadingCaseImages.DB.Enums;
+using UploadingCaseImages.Service.Utilities;
 
 namespace UploadingCaseImages.Service
 {
 	public interface IBodyImageService
 	{
-		Task<IEnumerable<BodyImageDto>> GetAllImagesAsync();
-		Task<BodyImageDto> GetImageByIdAsync(int id);
-		Task AddImageAsync(UpdateBodyImageDto dto);
-		Task UpdateImageAsync(int id, UpdateBodyImageDto dto);
-		Task DeleteImageAsync(int id);
-		Task<IEnumerable<BodyImageDto>> FilterImagesByBodyPartAsync(BodyPart bodyPart);
+		Task<GenericResponseModel<IEnumerable<BodyImageDto>>> GetAllImageCaseAsync();
+		Task<GenericResponseModel<BodyImageDto>> GetImageByIdAsync(int id);
+		Task<GenericResponseModel<bool>> AddImageAsync(BodyImageDto dto);
+		Task<GenericResponseModel<bool>> UpdateImageAsync(int id, UpdateBodyImageDto dto);
+		Task<GenericResponseModel<bool>> DeleteImageAsync(int id);
+		Task<GenericResponseModel<IEnumerable<BodyImageDto>>> FilterImagesByBodyPartAsync(AnatomyEnum bodyPart);
 	}
 }
-
-

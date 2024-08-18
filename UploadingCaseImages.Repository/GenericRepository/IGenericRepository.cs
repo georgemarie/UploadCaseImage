@@ -9,7 +9,7 @@ namespace UploadingCaseImages.Repository
 	public interface IGenericRepository<TEntity> where TEntity : class
 	{
 		Task<IEnumerable<TEntity>> GetAll();
-		Task<TEntity> GetById(int id); 
+		Task<TEntity> GetById(int id);
 		Task<List<TEntity>> GetByIds(Expression<Func<TEntity, bool>> wherePredicate, int[] ids);
 		Task<List<TEntity>> GetByIds(Expression<Func<TEntity, bool>> wherePredicate, int[] ids, List<string> include);
 		Task<List<TEntity>> GetByIds(Expression<Func<TEntity, bool>> wherePredicate, int[] ids, string columnName);
@@ -19,7 +19,7 @@ namespace UploadingCaseImages.Repository
 		Task<TEntity> Update(TEntity entity);
 		Task UpdateRange(IEnumerable<TEntity> entity);
 		TEntity Delete(int id);
-		Task<IEnumerable<BodyImageModel>> GetData(Expression<Func<BodyImageModel, bool>> predicate);
+		Task<IEnumerable<AnatomyModel>> GetData(Expression<Func<AnatomyModel, bool>> predicate);
 		Task<IQueryable<TEntity>> GetQueryableData(Expression<Func<TEntity, bool>> predicate);
 		Task<TEntity> SingleOrDefault(Expression<Func<TEntity, bool>> predicate);
 		Task<TEntity> FirstOrDefault(Expression<Func<TEntity, bool>> predicate);

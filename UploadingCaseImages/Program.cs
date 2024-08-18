@@ -80,9 +80,6 @@ builder.Services.AddValidatorsFromAssembly(UploadingCaseImages.Service.AssemblyR
 
 var app = builder.Build();
 
-var mapper = app.Services.GetRequiredService<IMapper>();
-mapper.ConfigurationProvider.AssertConfigurationIsValid();
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

@@ -8,7 +8,7 @@ namespace UploadingCaseImages.DB;
 
 public class UploadingCaseImagesContext : DbContext
 {
-	public DbSet<BodyImageModel> BodyImageModel { get; set; }
+	public DbSet<AnatomyModel> CaseImage { get; set; }
 
 	public UploadingCaseImagesContext(DbContextOptions<UploadingCaseImagesContext> options)
 		: base(options)
@@ -18,8 +18,6 @@ public class UploadingCaseImagesContext : DbContext
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
 		base.OnModelCreating(modelBuilder);
-
 		modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-		modelBuilder.ApplyConfiguration(new BodyImageConfiguration());
 	}
 }

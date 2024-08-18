@@ -20,7 +20,7 @@ namespace UploadingCaseImages.Controllers
 		[HttpGet]
 		public async Task<IActionResult> GetAllImages()
 		{
-			var images = await _imageService.GetAllImagesAsync();
+			var images = await _imageService.GetAllImageCaseAsync(); 
 			return Ok(images);
 		}
 
@@ -34,7 +34,7 @@ namespace UploadingCaseImages.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> AddImage([FromBody] UpdateBodyImageDto dto)
+		public async Task<IActionResult> AddImage([FromBody] BodyImageDto dto)
 		{
 			await _imageService.AddImageAsync(dto);
 			return CreatedAtAction(nameof(GetImageById), new { id = dto.Id }, dto);
@@ -55,7 +55,7 @@ namespace UploadingCaseImages.Controllers
 		}
 
 		[HttpGet("filter/{bodyPart}")]
-		public async Task<IActionResult> FilterImagesByBodyPart(BodyPart bodyPart)
+		public async Task<IActionResult> FilterImagesByBodyPart(AnatomyEnum bodyPart)
 		{
 			var images = await _imageService.FilterImagesByBodyPartAsync(bodyPart);
 			return Ok(images);

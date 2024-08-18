@@ -102,9 +102,9 @@ namespace UploadingCaseImages.Repository
 			return entity;
 		}
 
-		public async Task<IEnumerable<BodyImageModel>> GetData(Expression<Func<BodyImageModel, bool>> predicate)
+		public async Task<IEnumerable<AnatomyModel>> GetData(Expression<Func<AnatomyModel, bool>> predicate)
 		{
-			return await _context.BodyImageModel.Where(predicate).ToListAsync();
+			return await _context.CaseImage.Where(predicate).ToListAsync();
 		}
 
 

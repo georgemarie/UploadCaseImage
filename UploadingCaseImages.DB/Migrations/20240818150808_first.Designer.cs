@@ -11,8 +11,8 @@ using UploadingCaseImages.DB;
 namespace UploadingCaseImages.DB.Migrations
 {
     [DbContext(typeof(UploadingCaseImagesContext))]
-    [Migration("20240816205302_kjfky")]
-    partial class kjfky
+    [Migration("20240818150808_first")]
+    partial class first
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,13 +24,13 @@ namespace UploadingCaseImages.DB.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("UploadingCaseImages.DB.Model.BodyImageModel", b =>
+            modelBuilder.Entity("UploadingCaseImages.DB.Model.AnatomyModel", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("AnatomyId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AnatomyId"));
 
                     b.Property<int>("BodyPart")
                         .HasColumnType("int");
@@ -40,9 +40,9 @@ namespace UploadingCaseImages.DB.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.HasKey("Id");
+                    b.HasKey("AnatomyId");
 
-                    b.ToTable("BodyImageModel");
+                    b.ToTable("CaseImage");
                 });
 #pragma warning restore 612, 618
         }

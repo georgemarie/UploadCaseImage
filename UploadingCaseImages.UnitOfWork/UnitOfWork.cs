@@ -1,60 +1,31 @@
-using System.Collections;
-using System.Data;
-using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 using UploadingCaseImages.DB;
+using UploadingCaseImages.DB.Model;
 using UploadingCaseImages.Repository;
 
-namespace UploadingCaseImages.UnitOfWorks;
-
-public class UnitOfWork : IUnitOfWork
+namespace UploadingCaseImages.UnitOfWorks
 {
-	private readonly UploadingCaseImagesContext _context;
-	private Hashtable _repositories;
-
-	public UnitOfWork(UploadingCaseImagesContext context)
+	public class UnitOfWork : IUnitOfWork
 	{
-		_context = context;
-	}
+		private readonly UploadingCaseImagesContext _context;
+		private IGenericRepository<AnatomyModel> _anatomyRepository;
 
-	public async Task<int> SaveChanges()
-	{
-		return await _context.SaveChangesAsync();
-	}
-
-	public void Dispose()
-	{
-		_context.Dispose();
-	}
-
-	public IGenericRepository<TEntity> Repository<TEntity>()
-		where TEntity : class
-	{
-		_repositories ??= [];
-
-		string typeName = typeof(TEntity).Name;
-
-		if (!_repositories.ContainsKey(typeName))
+		public UnitOfWork(UploadingCaseImagesContext context)
 		{
-			Type repoType = typeof(GenericRepository<>);
-			object repoInstance = Activator.CreateInstance(repoType.MakeGenericType(typeof(TEntity)), _context);
-			_repositories.Add(typeName, repoInstance);
+			_context = context;
 		}
 
-		return (IGenericRepository<TEntity>)_repositories[typeName];
-	}
+		public IGenericRepository<AnatomyModel> AnatomyRepository
+		{
+			get
+			{
+				return _anatomyRepository ??= new GenericRepository<AnatomyModel>(_context);
+			}
+		}
 
-	public async Task BeginTransactionAsync(IsolationLevel isolationLevel)
-	{
-		await _context.Database.BeginTransactionAsync(isolationLevel);
-	}
-
-	public async Task CommitTransactionAsync()
-	{
-		await _context.Database.CommitTransactionAsync();
-	}
-
-	public async Task RollbackTransactionAsync()
-	{
-		await _context.Database.RollbackTransactionAsync();
+		public async Task SaveChangesAsync()
+		{
+			await _context.SaveChangesAsync();
+		}
 	}
 }

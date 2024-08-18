@@ -9,16 +9,16 @@ using UploadingCaseImages.DB.Model;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace UploadingCaseImages.DB.Configurations;
-public class BodyImageConfiguration : IEntityTypeConfiguration<BodyImageModel>
+public class AnatomyConfiguration : IEntityTypeConfiguration<AnatomyModel>
 {
-	public void Configure(EntityTypeBuilder<BodyImageModel> builder)
+	public void Configure(EntityTypeBuilder<AnatomyModel> builder)
 	{
-		builder.Property(image => image.Id)
+		builder.Property(image => image.AnatomyId)
 			   .IsRequired();
 
 		builder.Property(image => image.ImagePath)
 			   .IsRequired()
-				.HasMaxLength(256);
+			   .HasMaxLength(256);
 
 		builder.Property(image => image.BodyPart)
 			   .IsRequired();

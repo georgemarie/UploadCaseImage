@@ -10,5 +10,5 @@ public class UpdateBodyImageDto
 {
 	public int Id { get; set; }
 	public string ImagePath { get; set; }
-	public BodyPart BodyPart { get; set; }
+	public AnatomyEnum BodyPart { get; set; }
 }

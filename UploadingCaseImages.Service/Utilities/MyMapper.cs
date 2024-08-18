@@ -8,9 +8,9 @@ namespace UploadingCaseImages.Service.Profiles
 	{
 		public MyMapper()
 		{
-			CreateMap<UpdateBodyImageDto, BodyImageModel>();
-			CreateMap<BodyImageModel, BodyImageDto>(); // Mapping from BodyImageModel to BodyImageDto
-			CreateMap<BodyImageDto, BodyImageModel>();
+			CreateMap<UpdateBodyImageDto, AnatomyModel>();
+			CreateMap<AnatomyModel, BodyImageDto>();
+			CreateMap<BodyImageDto, AnatomyModel>();
 		}
 	}
 }
