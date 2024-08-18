@@ -1,31 +1,22 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using static System.Net.Mime.MediaTypeNames;
-using UploadingCaseImages.UnitOfWorks;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using UploadingCaseImages.Service.DTOs;
 using UploadingCaseImages.Service;
+using UploadingCaseImages.Service.DTOs;
 
 namespace UploadingCaseImages.Controllers;
 [ApiController]
 [Route("api/[controller]")]
-public class ImageUploadController : ControllerBase
+public class ImagesController : ControllerBase
 {
-	
-	private readonly IWebHostEnvironment _environment;
-
-	public ImageUploadController(IWebHostEnvironment environment)
+	public ImagesController()
 	{
-		
-		_environment = environment;
 	}
 
 	[HttpPost("upload")]
 	public async Task<IActionResult> UploadImages([FromForm] ImageUploadModel model)
 	{
-		List<ImageModel> images = new List<ImageModel>();
-
-		var uploadsFolder = Path.Combine(_environment.WebRootPath, "uploads");
+		var images = new List<ImageModel>();
+		var currentDirectory = Directory.GetCurrentDirectory();
+		var uploadsFolder = Path.Combine(currentDirectory, "CaseImages");
 		if (!Directory.Exists(uploadsFolder))
 		{
 			Directory.CreateDirectory(uploadsFolder);
@@ -35,7 +26,9 @@ public class ImageUploadController : ControllerBase
 		{
 			if (file.Length > 0)
 			{
-				var filePath = Path.Combine(uploadsFolder, file.FileName);
+				var randomNumber = new Random().Next(100000, 999999);
+				var uniqueFileName = $"{Path.GetFileNameWithoutExtension(file.FileName)}_{randomNumber}{Path.GetExtension(file.FileName)}";
+				var filePath = Path.Combine(uploadsFolder, uniqueFileName);
 				using (var stream = new FileStream(filePath, FileMode.Create))
 				{
 					await file.CopyToAsync(stream);
@@ -43,14 +36,13 @@ public class ImageUploadController : ControllerBase
 
 				var image = new ImageModel
 				{
-					FileName = file.FileName,
-					FilePath = Path.Combine("uploads", file.FileName), // Save relative path
+					FileName = uniqueFileName,
+					FilePath = Path.Combine("uploads", uniqueFileName)
 				};
 
 				images.Add(image);
-				
-			}
 
+			}
 		}
 
 		return Ok(GenericResponseModel<List<ImageModel>>.Success(images));
