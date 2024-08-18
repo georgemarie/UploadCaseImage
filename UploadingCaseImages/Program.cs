@@ -85,16 +85,12 @@ if (app.Environment.IsDevelopment())
 {
 	app.UseSwagger();
 	app.UseSwaggerUI();
-	app.UseDeveloperExceptionPage();
 }
 else
 {
-	app.UseExceptionHandler("/Home/Error");
 	app.UseHsts();
 }
-
-
-
+app.UseExceptionHandler();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
