@@ -8,9 +8,22 @@ namespace UploadingCaseImages.Service.Profiles
 	{
 		public MyMapper()
 		{
-			CreateMap<UpdateBodyImageDto, AnatomyModel>();
-			CreateMap<AnatomyModel, BodyImageDto>();
-			CreateMap<BodyImageDto, AnatomyModel>();
+			// Anatomy and BodyImageDto mappings
+			CreateMap<Anatomy, GetPatientCaseDto>()
+				.ReverseMap(); // If you want two-way mapping
+
+			// UpdateBodyImageDto to Anatomy mapping
+			CreateMap<GetPatientCaseDto, Anatomy>();
+
+			// Assuming CaseImage is a model and CaseImageDto is its DTO
+			CreateMap<CaseImage, GetPatientCaseDto>()
+				.ReverseMap(); // If you want two-way mapping
+
+			// PatientCase mapping to DTO and vice versa
+			CreateMap<PatientCase, GetPatientCaseDto>()
+				.ReverseMap(); // If you want two-way mapping
+
+			// You can add other mappings here as needed
 		}
 	}
 }

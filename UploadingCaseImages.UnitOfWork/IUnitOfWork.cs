@@ -1,12 +1,18 @@
-using System.Threading.Tasks;
-using UploadingCaseImages.DB.Model;
+using System.Data;
 using UploadingCaseImages.Repository;
 
-namespace UploadingCaseImages.UnitOfWorks
+namespace UploadingCaseImages.UnitOfWorks;
+
+public interface IUnitOfWork : IDisposable
 {
-	public interface IUnitOfWork
-	{
-		IGenericRepository<AnatomyModel> AnatomyRepository { get; }
-		Task SaveChangesAsync();
-	}
+	Task<int> SaveChanges();
+
+	IGenericRepository<TEntity> Repository<TEntity>()
+		where TEntity : class;
+
+	Task BeginTransactionAsync(IsolationLevel isolationLevel);
+
+	Task CommitTransactionAsync();
+
+	Task RollbackTransactionAsync();
 }

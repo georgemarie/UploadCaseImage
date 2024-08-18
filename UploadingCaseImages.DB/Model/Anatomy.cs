@@ -1,16 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using UploadingCaseImages.DB.Enums;
 
 namespace UploadingCaseImages.DB.Model;
-public class AnatomyModel
+public class Anatomy
 {
-	[Key]
 	public int AnatomyId { get; set; }
+	public string AnatomyName { get; set; }
 	public string ImagePath { get; set; }
-	public AnatomyEnum BodyPart { get; set; }
+	public DateTime CreatedAt { get; set; }
 }
