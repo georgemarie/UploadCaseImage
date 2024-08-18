@@ -8,11 +8,11 @@ namespace UploadingCaseImages.Controllers
 {
 	[ApiController]
 	[Route("api/[controller]")]
-	public class BodyImageController : ControllerBase
+	public class ReturnImageHistoryController : ControllerBase
 	{
 		private readonly IBodyImageService _imageService;
 
-		public BodyImageController(IBodyImageService imageService)
+		public ReturnImageHistoryController(IBodyImageService imageService)
 		{
 			_imageService = imageService;
 		}
