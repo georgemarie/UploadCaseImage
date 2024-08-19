@@ -15,7 +15,6 @@ public class PatientCaseController : Controller
 	[HttpGet("GetPatientCase")]
 	public async Task<IActionResult> GetPatientCase([FromQuery] GetPatientCaseDto dto)
 	{
-		var response = await _patientCaseService.GetPatientCaseAsync(dto);
-		return Ok(response);
+		return Ok(await _patientCaseService.GetPatientCaseAsync(dto));
 	}
 }

@@ -1,4 +1,3 @@
-using System;
 using System.Globalization;
 using System.Text.Json;
 using FluentValidation;
@@ -11,13 +10,16 @@ using Scrutor;
 using UploadingCaseImages.Common.Handlers;
 using UploadingCaseImages.DB;
 using UploadingCaseImages.Service;
-using AutoMapper;
 using UploadingCaseImages.Service.Profiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbContext<UploadingCaseImagesContext>(options =>options.UseSqlServer(builder.Configuration.GetConnectionString("UploadingCaseDbContext")));
+builder.Services.AddDbContext<UploadingCaseImagesContext>((sp, optionBuilder) =>
+{
+	optionBuilder.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection"));
+});
+
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddAutoMapper(typeof(MyMapper));
 builder.Services.AddCors(options =>
