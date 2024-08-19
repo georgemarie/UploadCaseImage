@@ -34,4 +34,8 @@ public static class ListExtensions
 
 		return chunkedList;
 	}
+	public static List<T> FilterBy<T>(this List<T> list, System.Func<T, bool> predicate)
+	{
+		return list.Where(predicate).ToList();
+	}
 }
