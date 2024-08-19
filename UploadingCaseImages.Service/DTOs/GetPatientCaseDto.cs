@@ -14,5 +14,7 @@ public class GetPatientCaseDto
 	public DateTime CreatedAt { get; set; }
 	public int AnatomyId { get; set; }
 	public ICollection<CaseImage> CaseImages { get; set; }
+	public ICollection<ImageModel> ImageModels { get; set; }
+
 	public string AnatomyName { get; set; }
 }

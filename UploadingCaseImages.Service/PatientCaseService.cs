@@ -51,12 +51,18 @@ public class PatientCaseService : IPatientCaseService
 
 
 
-	public Task<GenericResponseModel<bool>> AddPatientCaseAsync(GetPatientCaseDto dto)
+	public async Task<GenericResponseModel<bool>> AddPatientCaseAsync(GetPatientCaseDto dto)
 	{
-		//var image = _mapper.Map<Anatomy>(dto);
-		//_unitOfWork.AnatomyRepository.Add(image);
-		//await _unitOfWork.SaveChangesAsync();
-		//return GenericResponseModel<bool>.Success(true);
-		return null;
+		var patientCase = _mapper.Map<PatientCase>(dto);
+		_unitOfWork.Repository<PatientCase>().Add(patientCase);
+		await _unitOfWork.SaveChanges();
+		foreach (var caseImageDto in dto.CaseImages)
+		{
+			var caseImage = _mapper.Map<CaseImage>(caseImageDto);
+			caseImage.PatientCaseId = patientCase.PatientCaseId;
+			_unitOfWork.Repository<CaseImage>().Add(caseImage);
+		}
+		await _unitOfWork.SaveChanges();
+		return GenericResponseModel<bool>.Success(true);
 	}
 }

@@ -18,4 +18,22 @@ public class PatientCaseController : Controller
 		var response = await _patientCaseService.GetPatientCaseAsync(dto);
 		return Ok(response);
 	}
+
+	[HttpPost("SaveInfo")]
+	public async Task<IActionResult> AddPatientCase([FromBody] GetPatientCaseDto dto)
+	{
+		if (dto == null)
+		{
+			return BadRequest("Patient case data is null.");
+		}
+
+		var response = await _patientCaseService.AddPatientCaseAsync(dto);
+
+		if (response.IsSuccess)
+		{
+			return Ok(response.Data);
+		}
+
+		return StatusCode(500, "Internal server error.");
+	}
 }

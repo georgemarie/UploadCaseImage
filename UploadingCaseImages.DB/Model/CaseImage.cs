@@ -14,3 +14,4 @@ public class CaseImage
 	public int PatientCaseId { get; set; }
 	public PatientCase PatientCase { get; set; }
 }
+
