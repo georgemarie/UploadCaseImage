@@ -18,7 +18,6 @@ public class GenericResponseModel<TResult> : BaseResponseModel
 		: base(message) => Data = data;
 
 	public TResult Data { get; set; }
-	public bool IsSuccess { get; set; }
 
 	public static GenericResponseModel<TResult> Success(TResult data)
 		=> new(data, Constants.SuccessMessage);

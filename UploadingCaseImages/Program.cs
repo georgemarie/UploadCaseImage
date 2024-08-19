@@ -63,10 +63,6 @@ builder.Services.AddCors(opt =>
 
 
 
-builder.Services.AddControllers();
-builder.Services.AddScoped<IPatientCaseService, PatientCaseService>();
-
-
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 

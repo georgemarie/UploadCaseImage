@@ -28,11 +28,6 @@ public class PatientCaseController : Controller
 
 		var response = await _patientCaseService.AddPatientCaseAsync(dto);
 
-		if (response.IsSuccess)
-		{
-			return Ok(response.Data);
-		}
-
-		return StatusCode(500, "Internal server error.");
+		return response.ErrorList.Count != 0 ? BadRequest(response) : Ok(response);
 	}
 }
