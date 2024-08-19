@@ -36,7 +36,7 @@ builder.Services.AddControllers()
 	.ConfigureApiBehaviorOptions(options =>
 	{
 		options.InvalidModelStateResponseFactory = context => ValidationResult(context);
-	})
+	})	
 	.AddJsonOptions(o =>
 	{
 		o.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
@@ -44,7 +44,6 @@ builder.Services.AddControllers()
 	});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 builder.Services.AddLocalization(opts => opts.ResourcesPath = "Resources");
 
 builder.Services.Configure<RequestLocalizationOptions>(opts =>
@@ -61,6 +60,8 @@ builder.Services.Configure<RequestLocalizationOptions>(opts =>
 
 builder.Services.AddCors(opt =>
 	opt.AddDefaultPolicy(o => o.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+
+
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();

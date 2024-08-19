@@ -17,4 +17,17 @@ public class PatientCaseController : Controller
 	{
 		return Ok(await _patientCaseService.GetPatientCaseAsync(dto));
 	}
+
+	[HttpPost("SaveInfo")]
+	public async Task<IActionResult> AddPatientCase([FromBody] PatientCaseToSave dto)
+	{
+		if (dto == null)
+		{
+			return BadRequest("Patient case data is null.");
+		}
+
+		var response = await _patientCaseService.AddPatientCaseAsync(dto);
+
+		return response.ErrorList.Count != 0 ? BadRequest(response) : Ok(response);
+	}
 }
