@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UploadingCaseImages.DB;
 
@@ -11,9 +12,11 @@ using UploadingCaseImages.DB;
 namespace UploadingCaseImages.DB.Migrations
 {
     [DbContext(typeof(UploadingCaseImagesContext))]
-    partial class UploadingCaseImagesContextModelSnapshot : ModelSnapshot
+    [Migration("20240818211638_AllModels")]
+    partial class AllModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,8 +96,6 @@ namespace UploadingCaseImages.DB.Migrations
 
                     b.HasKey("PatientCaseId");
 
-                    b.HasIndex("AnatomyId");
-
                     b.ToTable("PatientCase");
                 });
 
@@ -107,17 +108,6 @@ namespace UploadingCaseImages.DB.Migrations
                         .IsRequired();
 
                     b.Navigation("PatientCase");
-                });
-
-            modelBuilder.Entity("UploadingCaseImages.DB.Model.PatientCase", b =>
-                {
-                    b.HasOne("UploadingCaseImages.DB.Model.Anatomy", "Anatomy")
-                        .WithMany()
-                        .HasForeignKey("AnatomyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Anatomy");
                 });
 
             modelBuilder.Entity("UploadingCaseImages.DB.Model.PatientCase", b =>

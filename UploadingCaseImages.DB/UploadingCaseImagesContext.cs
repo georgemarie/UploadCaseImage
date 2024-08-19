@@ -18,7 +18,6 @@ public class UploadingCaseImagesContext : DbContext
                 .HasForeignKey(a => a.CaseId);
 
 		base.OnModelCreating(modelBuilder);
-
 		modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 	}
 	public static void ConfigureDbContextOptions(DbContextOptionsBuilder optionsBuilder)

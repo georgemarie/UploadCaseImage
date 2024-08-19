@@ -55,6 +55,3 @@ Packages/
 *.vspscc
 *.vssscc
 node_modules/
-
-# appsettings
-appsettings*.json
