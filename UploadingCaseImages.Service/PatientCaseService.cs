@@ -64,7 +64,7 @@ public class PatientCaseService : IPatientCaseService
 		return query;
 	}
 
-	public async Task<GenericResponseModel<bool>> AddPatientCaseAsync(GetPatientCaseDto dto)
+	public async Task<GenericResponseModel<bool>> AddPatientCaseAsync(PatientCaseToSave dto)
 	{
 		var patientCase = _mapper.Map<PatientCase>(dto);
 		_unitOfWork.Repository<PatientCase>().Add(patientCase);

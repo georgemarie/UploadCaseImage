@@ -19,7 +19,7 @@ public class PatientCaseController : Controller
 	}
 
 	[HttpPost("SaveInfo")]
-	public async Task<IActionResult> AddPatientCase([FromBody] GetPatientCaseDto dto)
+	public async Task<IActionResult> AddPatientCase([FromBody] PatientCaseToSave dto)
 	{
 		if (dto == null)
 		{

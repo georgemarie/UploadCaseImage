@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UploadingCaseImages.DB.Model;
+using UploadingCaseImages.Service.DTOs;
 using UploadingCaseImages.UnitOfWorks;
 
 namespace UploadingCaseImages.Service;
@@ -16,9 +17,9 @@ public class AnatomyService : IAnatomyService
 		_unitOfWork = unitOfWork;
 	}
 
-	public async Task<IEnumerable<Anatomy>> GetAllAnatomiesAsync()
+	public async Task<GenericResponseModel<List<Anatomy>>> GetAllAnatomiesAsync()
 	{
 		var anatomies = await _unitOfWork.Repository<Anatomy>().GetAll();
-		return anatomies;
+		return GenericResponseModel<List<Anatomy>>.Success(anatomies.ToList());
 	}
 }
