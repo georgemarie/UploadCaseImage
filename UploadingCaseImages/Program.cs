@@ -13,10 +13,9 @@ using UploadingCaseImages.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<UploadingCaseImagesContext>((sp, optionBuilder) =>
-{
-	optionBuilder.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection"));
-});
+builder.Services.AddDbContext<UploadingCaseImagesContext>(options =>
+	options.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection"),
+	b => b.MigrationsAssembly("UploadingCaseImages.DB")));
 
 // Add services to the container.
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
