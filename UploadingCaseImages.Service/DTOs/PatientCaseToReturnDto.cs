@@ -1,11 +1,11 @@
-namespace UploadingCaseImages.DB.Model;
-public class PatientCase
+namespace UploadingCaseImages.Service.DTOs;
+public class PatientCaseToReturnDto
 {
 	public int PatientCaseId { get; set; }
 	public string Note { get; set; }
 	public DateTime VisitDate { get; set; }
 	public DateTime CreatedAt { get; set; }
 	public int AnatomyId { get; set; }
-	public Anatomy Anatomy { get; set; }
-	public ICollection<CaseImage> CaseImages { get; set; }
+	public string AnatomyName { get; set; }
+	public List<CaseImageToReturnDto> CaseImages { get; set; }
 }

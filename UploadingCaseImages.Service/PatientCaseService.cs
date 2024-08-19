@@ -1,16 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UploadingCaseImages.UnitOfWorks;
-using UploadingCaseImages.Service.Utilities;
 using AutoMapper;
-using UploadingCaseImages.Service.DTOs;
-using System.Linq.Expressions;
-using UploadingCaseImages.DB.Model;
 using Microsoft.EntityFrameworkCore;
-
+using UploadingCaseImages.DB.Model;
+using UploadingCaseImages.Service.DTOs;
+using UploadingCaseImages.UnitOfWorks;
 
 namespace UploadingCaseImages.Service;
 public class PatientCaseService : IPatientCaseService
@@ -24,32 +16,53 @@ public class PatientCaseService : IPatientCaseService
 		_mapper = mapper;
 	}
 
-	public async Task<GenericResponseModel<IEnumerable<GetPatientCaseDto>>> GetPatientCaseAsync(GetPatientCaseDto dto)
+	public async Task<GenericResponseModel<IEnumerable<PatientCaseToReturnDto>>> GetPatientCaseAsync(GetPatientCaseDto dto)
 	{
-		IQueryable<GetPatientCaseDto> query = (IQueryable<GetPatientCaseDto>)_unitOfWork.Repository<GetPatientCaseDto>().GetQueryableData(_ => true);
+		var query = _unitOfWork
+			.Repository<PatientCase>()
+			.FindBy(a => true);
 
-		// Filter by Date if provided
-		if (dto.VisitDate != null)
-		{
-			query = query.Where(img => img.VisitDate == dto.VisitDate);
-		}
+		query = ApplyFiltrationOnPatientCases(dto, query);
 
-		// Filter by ID if provided
-		if (dto.PatientCaseId != null)
-		{
-			query = query.Where(img => img.PatientCaseId == dto.PatientCaseId);
-		}
+		var patientCases = await query
+			.Include(a => a.CaseImages)
+			.Select(p => new PatientCaseToReturnDto
+			{
+				PatientCaseId = p.PatientCaseId,
+				Note = p.Note,
+				VisitDate = p.VisitDate,
+				AnatomyId = p.AnatomyId,
+				AnatomyName = p.Anatomy.AnatomyName,
+				CreatedAt = p.CreatedAt,
+				CaseImages = p.CaseImages.Select(a => new CaseImageToReturnDto
+				{
+					CaseImageId = a.CaseImageId,
+					CaseName = a.CaseName,
+					CreatedAt = a.CreatedAt,
+					CasePath = a.CasePath
+				}).ToList()
+			})
+			.ToListAsync();
 
-		// Execute the query
-		var patientCases = await query.ToListAsync();
-
-		// Map to DTOs if necessary
-		var patientCaseDtos = patientCases.Select(patientCase => _mapper.Map<GetPatientCaseDto>(patientCase));
-
-		return GenericResponseModel<IEnumerable<GetPatientCaseDto>>.Success(patientCaseDtos);
+		return GenericResponseModel<IEnumerable<PatientCaseToReturnDto>>.Success(patientCases);
 	}
 
+	private static IQueryable<PatientCase> ApplyFiltrationOnPatientCases(GetPatientCaseDto dto, IQueryable<PatientCase> query)
+	{
+		if (dto.VisitDate.HasValue && dto.VisitDate.Value != default)
+		{
+			query = query.Where(p => p.VisitDate.Date.Year == dto.VisitDate.Value.Date.Year
+			&& p.VisitDate.Date.Month == dto.VisitDate.Value.Date.Month
+			&& p.VisitDate.Date.Day == dto.VisitDate.Value.Date.Day);
+		}
 
+		if (dto.AnatomyId.HasValue && dto.AnatomyId.Value > 0)
+		{
+			query = query.Where(p => p.AnatomyId == dto.AnatomyId.Value);
+		}
+
+		return query;
+	}
 
 	public async Task<GenericResponseModel<bool>> AddPatientCaseAsync(GetPatientCaseDto dto)
 	{
