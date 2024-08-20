@@ -24,15 +24,11 @@ namespace UploadingCaseImages.DB.Migrations
 
             modelBuilder.Entity("UploadingCaseImages.DB.Model.Anatomy", b =>
                 {
-                    b.Property<int>("AnatomyId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AnatomyId"));
-
-                    b.Property<string>("AnatomyName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -41,42 +37,51 @@ namespace UploadingCaseImages.DB.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("AnatomyId");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
 
                     b.ToTable("Anatomy");
                 });
 
             modelBuilder.Entity("UploadingCaseImages.DB.Model.CaseImage", b =>
                 {
-                    b.Property<int>("CaseImageId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("CaseName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CasePath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("ImageName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("PatientCaseId")
                         .HasColumnType("int");
 
-                    b.HasKey("CaseImageId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("PatientCaseId");
 
                     b.ToTable("CaseImage");
                 });
 
             modelBuilder.Entity("UploadingCaseImages.DB.Model.PatientCase", b =>
                 {
-                    b.Property<int>("PatientCaseId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PatientCaseId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AnatomyId")
                         .HasColumnType("int");
@@ -91,7 +96,7 @@ namespace UploadingCaseImages.DB.Migrations
                     b.Property<DateTime>("VisitDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("PatientCaseId");
+                    b.HasKey("Id");
 
                     b.HasIndex("AnatomyId");
 
@@ -102,7 +107,7 @@ namespace UploadingCaseImages.DB.Migrations
                 {
                     b.HasOne("UploadingCaseImages.DB.Model.PatientCase", "PatientCase")
                         .WithMany("CaseImages")
-                        .HasForeignKey("CaseImageId")
+                        .HasForeignKey("PatientCaseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -114,7 +119,7 @@ namespace UploadingCaseImages.DB.Migrations
                     b.HasOne("UploadingCaseImages.DB.Model.Anatomy", "Anatomy")
                         .WithMany()
                         .HasForeignKey("AnatomyId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Anatomy");

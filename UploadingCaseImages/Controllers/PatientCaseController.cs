@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
-using UploadingCaseImages.Service.DTOs;
 using UploadingCaseImages.Service;
+using UploadingCaseImages.Service.DTOs;
 
 namespace UploadingCaseImages.Controllers;
+[ApiController]
+[Route("api/[controller]")]
 public class PatientCaseController : Controller
 {
 	private readonly IPatientCaseService _patientCaseService;
@@ -18,7 +20,7 @@ public class PatientCaseController : Controller
 		return Ok(await _patientCaseService.GetPatientCaseAsync(dto));
 	}
 
-	[HttpPost("SaveInfo")]
+	[HttpPost("add")]
 	public async Task<IActionResult> AddPatientCase([FromBody] PatientCaseToSave dto)
 	{
 		if (dto == null)
@@ -30,14 +32,11 @@ public class PatientCaseController : Controller
 
 		return response.ErrorList.Count != 0 ? BadRequest(response) : Ok(response);
 	}
+
 	[HttpGet("{id}")]
-	public async Task<IActionResult> GetCaseById(int id)
+	public async Task<IActionResult> GetCaseById([FromRoute] int id)
 	{
-		var caseDetails = await _patientCaseService.GetCaseByIdAsync(id);
-		if (caseDetails == null)
-		{
-			return NotFound();
-		}
-		return Ok(caseDetails);
+		var response = await _patientCaseService.GetPatientCaseByIdAsync(id);
+		return response.ErrorList.Count != 0 ? BadRequest(response) : Ok(response);
 	}
 }

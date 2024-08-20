@@ -14,6 +14,6 @@ public class AnatomyConfiguration : IEntityTypeConfiguration<Anatomy>
 {
 	public void Configure(EntityTypeBuilder<Anatomy> builder)
 	{
-		builder.HasKey(x => x.AnatomyId);
+		builder.HasKey(x => x.Id);
 	}
 }

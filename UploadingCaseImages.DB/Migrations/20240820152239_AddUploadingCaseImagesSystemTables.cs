@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace UploadingCaseImages.DB.Migrations
 {
     /// <inheritdoc />
-    public partial class AllModels : Migration
+    public partial class AddUploadingCaseImagesSystemTables : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,22 +15,22 @@ namespace UploadingCaseImages.DB.Migrations
                 name: "Anatomy",
                 columns: table => new
                 {
-                    AnatomyId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    AnatomyName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Anatomy", x => x.AnatomyId);
+                    table.PrimaryKey("PK_Anatomy", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "PatientCase",
                 columns: table => new
                 {
-                    PatientCaseId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     VisitDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -39,42 +39,59 @@ namespace UploadingCaseImages.DB.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PatientCase", x => x.PatientCaseId);
+                    table.PrimaryKey("PK_PatientCase", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PatientCase_Anatomy_AnatomyId",
+                        column: x => x.AnatomyId,
+                        principalTable: "Anatomy",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "CaseImage",
                 columns: table => new
                 {
-                    CaseImageId = table.Column<int>(type: "int", nullable: false),
-                    CaseName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CasePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ImageName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PatientCaseId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CaseImage", x => x.CaseImageId);
+                    table.PrimaryKey("PK_CaseImage", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CaseImage_PatientCase_CaseImageId",
-                        column: x => x.CaseImageId,
+                        name: "FK_CaseImage_PatientCase_PatientCaseId",
+                        column: x => x.PatientCaseId,
                         principalTable: "PatientCase",
-                        principalColumn: "PatientCaseId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CaseImage_PatientCaseId",
+                table: "CaseImage",
+                column: "PatientCaseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PatientCase_AnatomyId",
+                table: "PatientCase",
+                column: "AnatomyId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Anatomy");
-
-            migrationBuilder.DropTable(
                 name: "CaseImage");
 
             migrationBuilder.DropTable(
                 name: "PatientCase");
+
+            migrationBuilder.DropTable(
+                name: "Anatomy");
         }
     }
 }

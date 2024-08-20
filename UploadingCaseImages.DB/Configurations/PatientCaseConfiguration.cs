@@ -7,12 +7,13 @@ public class PatientCaseConfiguration : IEntityTypeConfiguration<PatientCase>
 {
 	public void Configure(EntityTypeBuilder<PatientCase> builder)
 	{
-		builder.HasKey(x => x.PatientCaseId);
+		builder.HasKey(x => x.Id);
 
 		builder.HasOne(a => a.Anatomy);
 
-		builder.HasMany(a => a.CaseImages)
+		builder
+			.HasMany(a => a.CaseImages)
 			.WithOne(a => a.PatientCase)
-			.HasForeignKey(a => a.CaseImageId);
+			.HasForeignKey(a => a.PatientCaseId);
 	}
 }

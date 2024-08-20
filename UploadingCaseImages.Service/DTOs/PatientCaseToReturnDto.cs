@@ -1,7 +1,7 @@
 namespace UploadingCaseImages.Service.DTOs;
 public class PatientCaseToReturnDto
 {
-	public int PatientCaseId { get; set; }
+	public int Id { get; set; }
 	public string Note { get; set; }
 	public DateTime VisitDate { get; set; }
 	public DateTime CreatedAt { get; set; }

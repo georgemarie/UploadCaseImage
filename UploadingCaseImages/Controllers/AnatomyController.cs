@@ -1,4 +1,3 @@
-	using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using UploadingCaseImages.Service;
 
@@ -13,10 +12,10 @@ public class AnatomyController : ControllerBase
 	{
 		_anatomyService = anatomyService;
 	}
+
 	[HttpGet("All")]
 	public async Task<IActionResult> GetAllAnatomies()
 	{
-		var anatomies = await _anatomyService.GetAllAnatomiesAsync();
-		return Ok(anatomies);
+		return Ok(await _anatomyService.GetAllAnatomiesAsync());
 	}
 }

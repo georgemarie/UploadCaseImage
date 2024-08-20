@@ -1,8 +1,8 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using UploadingCaseImages.DB;
 using UploadingCaseImages.DB.Model;
 using UploadingCaseImages.Service.DTOs;
+using UploadingCaseImages.Service.Utilities;
 using UploadingCaseImages.UnitOfWorks;
 
 namespace UploadingCaseImages.Service;
@@ -10,13 +10,11 @@ public class PatientCaseService : IPatientCaseService
 {
 	private readonly IUnitOfWork _unitOfWork;
 	private readonly IMapper _mapper;
-	private readonly UploadingCaseImagesContext _context;
 
-	public PatientCaseService(IUnitOfWork unitOfWork, IMapper mapper, UploadingCaseImagesContext context)
+	public PatientCaseService(IUnitOfWork unitOfWork, IMapper mapper)
 	{
 		_unitOfWork = unitOfWork;
 		_mapper = mapper;
-		_context = context;
 	}
 
 	public async Task<GenericResponseModel<IEnumerable<PatientCaseToReturnDto>>> GetPatientCaseAsync(GetPatientCaseDto dto)
@@ -28,26 +26,13 @@ public class PatientCaseService : IPatientCaseService
 		query = ApplyFiltrationOnPatientCases(dto, query);
 
 		var patientCases = await query
+			.Include(a => a.Anatomy)
 			.Include(a => a.CaseImages)
-			.Select(p => new PatientCaseToReturnDto
-			{
-				PatientCaseId = p.PatientCaseId,
-				Note = p.Note,
-				VisitDate = p.VisitDate,
-				AnatomyId = p.AnatomyId,
-				AnatomyName = p.Anatomy.AnatomyName,
-				CreatedAt = p.CreatedAt,
-				CaseImages = p.CaseImages.Select(a => new CaseImageToReturnDto
-				{
-					CaseImageId = a.CaseImageId,
-					CaseName = a.CaseName,
-					CreatedAt = a.CreatedAt,
-					CasePath = a.CasePath
-				}).ToList()
-			})
 			.ToListAsync();
 
-		return GenericResponseModel<IEnumerable<PatientCaseToReturnDto>>.Success(patientCases);
+		var patientCasesDto = _mapper.Map<List<PatientCaseToReturnDto>>(patientCases);
+
+		return GenericResponseModel<IEnumerable<PatientCaseToReturnDto>>.Success(patientCasesDto);
 	}
 
 	private static IQueryable<PatientCase> ApplyFiltrationOnPatientCases(GetPatientCaseDto dto, IQueryable<PatientCase> query)
@@ -72,26 +57,21 @@ public class PatientCaseService : IPatientCaseService
 		var patientCase = _mapper.Map<PatientCase>(dto);
 		_unitOfWork.Repository<PatientCase>().Add(patientCase);
 		await _unitOfWork.SaveChanges();
-		foreach (var caseImageDto in dto.CaseImages)
-		{
-			var caseImage = _mapper.Map<CaseImage>(caseImageDto);
-			caseImage.PatientCaseId = patientCase.PatientCaseId;
-			_unitOfWork.Repository<CaseImage>().Add(caseImage);
-		}
-		await _unitOfWork.SaveChanges();
 		return GenericResponseModel<bool>.Success(true);
 	}
-	public async Task<PatientCaseToReturnDto> GetCaseByIdAsync(int id)
-	{
-		var patientCase = await _context.Set<PatientCase>()
-			.Include(c => c.CaseImages)
-			.Include(c => c.Anatomy)
-			.FirstOrDefaultAsync(c => c.PatientCaseId == id);
 
-		if (patientCase == null)
-		{
-			return null;
-		}
-		return _mapper.Map<PatientCaseToReturnDto>(patientCase);
+	public async Task<GenericResponseModel<PatientCaseToReturnDto>> GetPatientCaseByIdAsync(int id)
+	{
+		var patientCase = await _unitOfWork.Repository<PatientCase>()
+			.FindBy(c => c.Id == id, true)
+			.Include(a => a.Anatomy)
+			.Include(a => a.CaseImages)
+			.FirstOrDefaultAsync();
+		if (patientCase is null)
+			return GenericResponseModel<PatientCaseToReturnDto>.Failure(Constants.FailureMessage, new List<ErrorResponseModel> { ErrorResponseModel.Create(nameof(id), "Patient case not found.") });
+
+		var patientCaseDto = _mapper.Map<PatientCaseToReturnDto>(patientCase);
+
+		return GenericResponseModel<PatientCaseToReturnDto>.Success(patientCaseDto);
 	}
 }

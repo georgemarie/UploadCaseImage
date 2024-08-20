@@ -7,14 +7,10 @@ namespace UploadingCaseImages.Controllers;
 [Route("api/[controller]")]
 public class ImagesController : ControllerBase
 {
-	public ImagesController()
-	{
-	}
-
 	[HttpPost("upload")]
 	public async Task<IActionResult> UploadImages([FromForm] ImageUploadModel model)
 	{
-		var images = new List<ImageModel>();
+		var images = new List<UploadedImageToReturnDto>();
 		var currentDirectory = Directory.GetCurrentDirectory();
 		var uploadsFolder = Path.Combine(currentDirectory, "CaseImages");
 		if (!Directory.Exists(uploadsFolder))
@@ -34,10 +30,10 @@ public class ImagesController : ControllerBase
 					await file.CopyToAsync(stream);
 				}
 
-				var image = new ImageModel
+				var image = new UploadedImageToReturnDto
 				{
-					FileName = uniqueFileName,
-					FilePath = Path.Combine("uploads", uniqueFileName)
+					ImageName = uniqueFileName,
+					ImagePath = Path.Combine("uploads", uniqueFileName)
 				};
 
 				images.Add(image);
@@ -45,7 +41,7 @@ public class ImagesController : ControllerBase
 			}
 		}
 
-		return Ok(GenericResponseModel<List<ImageModel>>.Success(images));
+		return Ok(GenericResponseModel<List<UploadedImageToReturnDto>>.Success(images));
 	}
 }
 
