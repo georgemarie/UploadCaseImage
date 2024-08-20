@@ -16,13 +16,12 @@ using UploadingCaseImages.Service.Profiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+
 builder.Services.AddDbContext<UploadingCaseImagesContext>((sp, optionBuilder) =>
 {
 	optionBuilder.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection"));
 });
-builder.Services.AddScoped<CaseService>(); // Explicitly register CaseService
-builder.Services.AddScoped<IGenericRepository<PatientCase>, GenericRepository<PatientCase>>(); // Register repository
+
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddAutoMapper(typeof(MyMapper));
 builder.Services.AddCors(options =>
@@ -89,7 +88,6 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-	app.UseDeveloperExceptionPage();
 	app.UseSwagger();
 	app.UseSwaggerUI();
 }

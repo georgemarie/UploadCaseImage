@@ -30,4 +30,14 @@ public class PatientCaseController : Controller
 
 		return response.ErrorList.Count != 0 ? BadRequest(response) : Ok(response);
 	}
+	[HttpGet("{id}")]
+	public async Task<IActionResult> GetCaseById(int id)
+	{
+		var caseDetails = await _patientCaseService.GetCaseByIdAsync(id);
+		if (caseDetails == null)
+		{
+			return NotFound();
+		}
+		return Ok(caseDetails);
+	}
 }

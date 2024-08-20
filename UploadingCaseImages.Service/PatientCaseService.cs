@@ -1,5 +1,6 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using UploadingCaseImages.DB;
 using UploadingCaseImages.DB.Model;
 using UploadingCaseImages.Service.DTOs;
 using UploadingCaseImages.UnitOfWorks;
@@ -9,11 +10,13 @@ public class PatientCaseService : IPatientCaseService
 {
 	private readonly IUnitOfWork _unitOfWork;
 	private readonly IMapper _mapper;
+	private readonly UploadingCaseImagesContext _context;
 
-	public PatientCaseService(IUnitOfWork unitOfWork, IMapper mapper)
+	public PatientCaseService(IUnitOfWork unitOfWork, IMapper mapper, UploadingCaseImagesContext context)
 	{
 		_unitOfWork = unitOfWork;
 		_mapper = mapper;
+		_context = context;
 	}
 
 	public async Task<GenericResponseModel<IEnumerable<PatientCaseToReturnDto>>> GetPatientCaseAsync(GetPatientCaseDto dto)
@@ -77,5 +80,18 @@ public class PatientCaseService : IPatientCaseService
 		}
 		await _unitOfWork.SaveChanges();
 		return GenericResponseModel<bool>.Success(true);
+	}
+	public async Task<PatientCaseToReturnDto> GetCaseByIdAsync(int id)
+	{
+		var patientCase = await _context.Set<PatientCase>()
+			.Include(c => c.CaseImages)
+			.Include(c => c.Anatomy)
+			.FirstOrDefaultAsync(c => c.PatientCaseId == id);
+
+		if (patientCase == null)
+		{
+			return null;
+		}
+		return _mapper.Map<PatientCaseToReturnDto>(patientCase);
 	}
 }
