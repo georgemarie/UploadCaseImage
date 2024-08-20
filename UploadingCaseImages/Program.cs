@@ -9,12 +9,14 @@ using Microsoft.EntityFrameworkCore;
 using Scrutor;
 using UploadingCaseImages.Common.Handlers;
 using UploadingCaseImages.DB;
+using UploadingCaseImages.DB.Model;
+using UploadingCaseImages.Repository;
 using UploadingCaseImages.Service;
 using UploadingCaseImages.Service.Profiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+
 builder.Services.AddDbContext<UploadingCaseImagesContext>((sp, optionBuilder) =>
 {
 	optionBuilder.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection"));

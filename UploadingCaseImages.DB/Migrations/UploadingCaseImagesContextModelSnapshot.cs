@@ -114,7 +114,7 @@ namespace UploadingCaseImages.DB.Migrations
                     b.HasOne("UploadingCaseImages.DB.Model.Anatomy", "Anatomy")
                         .WithMany()
                         .HasForeignKey("AnatomyId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Anatomy");

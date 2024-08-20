@@ -23,7 +23,16 @@ namespace UploadingCaseImages.Service.Profiles
 			CreateMap<PatientCase, GetPatientCaseDto>()
 				.ReverseMap(); // If you want two-way mapping
 
-			// You can add other mappings here as needed
+			CreateMap<CaseImage, CaseImageToReturnDto>();
+
+			CreateMap<Anatomy, AnatomyDto>();
+
+			CreateMap<PatientCase, PatientCaseToReturnDto>()
+			.ForMember(dest => dest.AnatomyId, opt => opt.MapFrom(src => src.Anatomy.AnatomyId))
+			.ForMember(dest => dest.AnatomyName, opt => opt.MapFrom(src => src.Anatomy.AnatomyName))
+			.ForMember(dest => dest.CaseImages, opt => opt.MapFrom(src => src.CaseImages));
 		}
+		// You can add other mappings here as needed
 	}
+	
 }
