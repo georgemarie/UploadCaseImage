@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Scrutor;
+using UploadingCaseImages.Common.Configurations;
 using UploadingCaseImages.Common.Handlers;
 using UploadingCaseImages.DB;
 using UploadingCaseImages.DB.Model;
@@ -104,11 +105,8 @@ app.UseCookiePolicy(new CookiePolicyOptions
 	MinimumSameSitePolicy = SameSiteMode.Strict
 });
 
-app.UseStaticFiles(new StaticFileOptions
-{
-	FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "CaseImages")),
-	RequestPath = "/CaseImages"
-});
+StaticFilesConfiguration.ConfigureStaticFiles(app);
+
 app.UseRouting();
 app.UseCors();
 app.UseAuthentication();
