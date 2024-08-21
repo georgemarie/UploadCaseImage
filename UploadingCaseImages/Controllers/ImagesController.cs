@@ -33,7 +33,7 @@ public class ImagesController : ControllerBase
 				var image = new UploadedImageToReturnDto
 				{
 					ImageName = uniqueFileName,
-					ImagePath = Path.Combine("uploads", uniqueFileName)
+					ImagePath = Path.Combine("CaseImages", uniqueFileName)
 				};
 
 				images.Add(image);
