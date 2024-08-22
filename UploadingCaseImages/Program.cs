@@ -88,15 +88,9 @@ builder.Services.AddValidatorsFromAssembly(UploadingCaseImages.Service.AssemblyR
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-	app.UseSwagger();
-	app.UseSwaggerUI();
-}
-else
-{
-	app.UseHsts();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
+app.UseHsts();
 app.UseExceptionHandler();
 app.UseHttpsRedirection();
 
