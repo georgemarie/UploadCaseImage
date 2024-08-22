@@ -1,3 +1,4 @@
+using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using UploadingCaseImages.Service;
 using UploadingCaseImages.Service.DTOs;
@@ -15,12 +16,14 @@ public class PatientCaseController : Controller
 	}
 
 	[HttpGet("GetPatientCase")]
+	[ProducesResponseType(typeof(GenericResponseModel<IEnumerable<PatientCaseToReturnDto>>), (int)HttpStatusCode.OK)]
 	public async Task<IActionResult> GetPatientCase([FromQuery] GetPatientCaseDto dto)
 	{
 		return Ok(await _patientCaseService.GetPatientCaseAsync(dto));
 	}
 
 	[HttpPost("add")]
+	[ProducesResponseType(typeof(GenericResponseModel<int>), (int)HttpStatusCode.OK)]
 	public async Task<IActionResult> AddPatientCase([FromBody] PatientCaseToSave dto)
 	{
 		if (dto == null)
@@ -34,6 +37,7 @@ public class PatientCaseController : Controller
 	}
 
 	[HttpGet("{id}")]
+	[ProducesResponseType(typeof(GenericResponseModel<PatientCaseToReturnDto>), (int)HttpStatusCode.OK)]
 	public async Task<IActionResult> GetCaseById([FromRoute] int id)
 	{
 		var response = await _patientCaseService.GetPatientCaseByIdAsync(id);

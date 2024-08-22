@@ -11,6 +11,14 @@ public class PatientCaseConfiguration : IEntityTypeConfiguration<PatientCase>
 
 		builder.HasOne(a => a.Anatomy);
 
+		builder.HasOne(c => c.Patient)
+			.WithMany(a => a.PatientCases)
+			.HasForeignKey(c => c.PatientId);
+
+		builder.HasOne(c => c.Doctor)
+			.WithMany(a => a.PatientCases)
+			.HasForeignKey(c => c.DoctorId);
+
 		builder
 			.HasMany(a => a.CaseImages)
 			.WithOne(a => a.PatientCase)

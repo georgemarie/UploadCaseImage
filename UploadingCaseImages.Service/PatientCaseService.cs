@@ -52,12 +52,12 @@ public class PatientCaseService : IPatientCaseService
 		return query;
 	}
 
-	public async Task<GenericResponseModel<bool>> AddPatientCaseAsync(PatientCaseToSave dto)
+	public async Task<GenericResponseModel<int>> AddPatientCaseAsync(PatientCaseToSave dto)
 	{
 		var patientCase = _mapper.Map<PatientCase>(dto);
 		_unitOfWork.Repository<PatientCase>().Add(patientCase);
 		await _unitOfWork.SaveChanges();
-		return GenericResponseModel<bool>.Success(true);
+		return GenericResponseModel<int>.Success(patientCase.Id);
 	}
 
 	public async Task<GenericResponseModel<PatientCaseToReturnDto>> GetPatientCaseByIdAsync(int id)
@@ -68,7 +68,12 @@ public class PatientCaseService : IPatientCaseService
 			.Include(a => a.CaseImages)
 			.FirstOrDefaultAsync();
 		if (patientCase is null)
-			return GenericResponseModel<PatientCaseToReturnDto>.Failure(Constants.FailureMessage, new List<ErrorResponseModel> { ErrorResponseModel.Create(nameof(id), "Patient case not found.") });
+			return new GenericResponseModel<PatientCaseToReturnDto>
+			{
+				Message = Constants.FailureMessage,
+				Data = null,
+				ErrorList = new List<ErrorResponseModel> { ErrorResponseModel.Create(nameof(id), "Patient case not found.") }
+			};
 
 		var patientCaseDto = _mapper.Map<PatientCaseToReturnDto>(patientCase);
 

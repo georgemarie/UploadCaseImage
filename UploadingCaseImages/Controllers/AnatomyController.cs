@@ -1,5 +1,7 @@
+using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using UploadingCaseImages.Service;
+using UploadingCaseImages.Service.DTOs;
 
 namespace UploadingCaseImages.Controllers;
 [ApiController]
@@ -14,6 +16,7 @@ public class AnatomyController : ControllerBase
 	}
 
 	[HttpGet("All")]
+	[ProducesResponseType(typeof(GenericResponseModel<List<AnatomyDto>>), (int)HttpStatusCode.OK)]
 	public async Task<IActionResult> GetAllAnatomies()
 	{
 		return Ok(await _anatomyService.GetAllAnatomiesAsync());

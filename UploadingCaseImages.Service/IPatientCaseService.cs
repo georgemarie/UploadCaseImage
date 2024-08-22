@@ -5,7 +5,7 @@ public interface IPatientCaseService
 {
 	Task<GenericResponseModel<IEnumerable<PatientCaseToReturnDto>>> GetPatientCaseAsync(GetPatientCaseDto dto);
 
-	Task<GenericResponseModel<bool>> AddPatientCaseAsync(PatientCaseToSave dto);
+	Task<GenericResponseModel<int>> AddPatientCaseAsync(PatientCaseToSave dto);
 
 	Task<GenericResponseModel<PatientCaseToReturnDto>> GetPatientCaseByIdAsync(int id);
 }

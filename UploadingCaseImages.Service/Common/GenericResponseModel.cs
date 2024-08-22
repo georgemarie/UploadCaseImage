@@ -14,6 +14,9 @@ public class GenericResponseModel<TResult> : BaseResponseModel
 		}
 	}
 
+	public GenericResponseModel()
+	{ }
+
 	protected GenericResponseModel(TResult data, string message)
 		: base(message) => Data = data;
 

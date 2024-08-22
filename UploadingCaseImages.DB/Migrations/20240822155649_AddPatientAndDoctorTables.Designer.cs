@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UploadingCaseImages.DB;
 
@@ -11,9 +12,11 @@ using UploadingCaseImages.DB;
 namespace UploadingCaseImages.DB.Migrations
 {
     [DbContext(typeof(UploadingCaseImagesContext))]
-    partial class UploadingCaseImagesContextModelSnapshot : ModelSnapshot
+    [Migration("20240822155649_AddPatientAndDoctorTables")]
+    partial class AddPatientAndDoctorTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

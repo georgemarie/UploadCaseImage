@@ -2,6 +2,10 @@ namespace UploadingCaseImages.Service;
 
 public class BaseResponseModel
 {
+	protected BaseResponseModel()
+	{
+	}
+
 	protected BaseResponseModel(string message)
 	{
 		Message = message;
