@@ -1,12 +1,16 @@
 using System.Globalization;
+using System.Text;
 using System.Text.Json;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Scrutor;
 using UploadingCaseImages.Common.Configurations;
 using UploadingCaseImages.Common.Handlers;
@@ -40,14 +44,47 @@ builder.Services.AddControllers()
 	.ConfigureApiBehaviorOptions(options =>
 	{
 		options.InvalidModelStateResponseFactory = context => ValidationResult(context);
-	})	
+	})
 	.AddJsonOptions(o =>
 	{
 		o.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
 		o.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
 	});
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(swagger =>
+{
+	swagger.SwaggerDoc("v1", new OpenApiInfo
+	{
+		Title = "UploadingCaseImages",
+		Description = "UploadingCaseImages",
+		Version = "1.0"
+	});
+
+	swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+	{
+		In = ParameterLocation.Header,
+		Description = "Please enter token",
+		Name = "Authorization",
+		Type = SecuritySchemeType.Http,
+		BearerFormat = "JWT",
+		Scheme = "bearer",
+	});
+
+	swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
+	{
+		{
+			new OpenApiSecurityScheme
+			{
+				Reference = new OpenApiReference
+				{
+					Type = ReferenceType.SecurityScheme,
+					Id = "Bearer"
+				}
+			},
+			Array.Empty<string>()
+		}
+	});
+});
 builder.Services.AddLocalization(opts => opts.ResourcesPath = "Resources");
 
 builder.Services.Configure<RequestLocalizationOptions>(opts =>
@@ -65,7 +102,23 @@ builder.Services.Configure<RequestLocalizationOptions>(opts =>
 builder.Services.AddCors(opt =>
 	opt.AddDefaultPolicy(o => o.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
-
+builder.Services.AddAuthentication(options =>
+{
+	options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+	options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+	options.TokenValidationParameters = new TokenValidationParameters
+	{
+		ValidateIssuer = true,
+		ValidIssuer = builder.Configuration["Jwt:Issuer"],
+		ValidateAudience = true,
+		ValidAudience = builder.Configuration["Jwt:Audience"],
+		ValidateIssuerSigningKey = true,
+		IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]))
+	};
+});
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();

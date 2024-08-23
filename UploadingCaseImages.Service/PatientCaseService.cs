@@ -1,5 +1,8 @@
+using System.IdentityModel.Tokens.Jwt;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using UploadingCaseImages.DB.Model;
 using UploadingCaseImages.Service.DTOs;
 using UploadingCaseImages.Service.Utilities;
@@ -10,11 +13,13 @@ public class PatientCaseService : IPatientCaseService
 {
 	private readonly IUnitOfWork _unitOfWork;
 	private readonly IMapper _mapper;
+	private readonly IHttpContextAccessor _contextAccessor;
 
-	public PatientCaseService(IUnitOfWork unitOfWork, IMapper mapper)
+	public PatientCaseService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor contextAccessor)
 	{
 		_unitOfWork = unitOfWork;
 		_mapper = mapper;
+		this._contextAccessor = contextAccessor;
 	}
 
 	public async Task<GenericResponseModel<IEnumerable<PatientCaseToReturnDto>>> GetPatientCaseAsync(GetPatientCaseDto dto)
@@ -52,9 +57,33 @@ public class PatientCaseService : IPatientCaseService
 		return query;
 	}
 
+	public int? GetUserIdFromToken()
+	{
+		var idClaim = _contextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == "UserId");
+		return idClaim != null ? int.Parse(idClaim.Value) : null;
+	}
+
+	public string GetUserTypeFromToken()
+	{
+		return _contextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == "UserType")?.Value;
+	}
 	public async Task<GenericResponseModel<int>> AddPatientCaseAsync(PatientCaseToSave dto)
 	{
+		var userId = GetUserIdFromToken();
+		var userType = GetUserTypeFromToken();
+
+		if (userId is null || string.IsNullOrEmpty(userType) || userType != "Doctor")
+		{
+			return new GenericResponseModel<int>
+			{
+				Data = 0,
+				Message = Constants.FailureMessage,
+				ErrorList = new List<ErrorResponseModel> { new ErrorResponseModel { Message = "Not Authorized", PropertyName = "Doctor" } }
+			};
+		}
+
 		var patientCase = _mapper.Map<PatientCase>(dto);
+		patientCase.DoctorId = userId.Value;
 		_unitOfWork.Repository<PatientCase>().Add(patientCase);
 		await _unitOfWork.SaveChanges();
 		return GenericResponseModel<int>.Success(patientCase.Id);
