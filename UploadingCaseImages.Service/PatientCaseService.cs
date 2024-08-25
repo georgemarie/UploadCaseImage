@@ -49,9 +49,10 @@ public class PatientCaseService : IPatientCaseService
 			&& p.VisitDate.Date.Day == dto.VisitDate.Value.Date.Day);
 		}
 
-		if (dto.AnatomyId.HasValue && dto.AnatomyId.Value > 0)
+		if (!string.IsNullOrEmpty(dto.AnatomyId))
 		{
-			query = query.Where(p => p.AnatomyId == dto.AnatomyId.Value);
+			var anatomyIds = dto.AnatomyId.Split(',').Select(int.Parse).ToList();
+			query = query.Where(p => anatomyIds.Contains(p.AnatomyId));
 		}
 
 		return query;
