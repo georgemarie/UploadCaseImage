@@ -1,8 +1,6 @@
-using System.IdentityModel.Tokens.Jwt;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using UploadingCaseImages.DB.Model;
 using UploadingCaseImages.Service.Common;
 using UploadingCaseImages.Service.DTOs;
@@ -32,14 +30,14 @@ public class PatientCaseService : IPatientCaseService
 		query = ApplyFiltrationOnPatientCases(dto, query);
 
 		var totalRecords = await query.CountAsync();
-		query = query.Skip((dto.PageNumber - 1) * dto.PageSize).Take(dto.PageSize);
 
 		var patientCases = await query
 			.Include(a => a.Anatomy)
 			.Include(a => a.CaseImages)
+			.Skip((dto.PageNumber - 1) * dto.PageSize)
+			.Take(dto.PageSize)
+			.OrderByDescending(x => x.CreatedAt)
 			.ToListAsync();
-
-		int actualPageSize = patientCases.Count;
 
 		var patientCasesDto = _mapper.Map<List<PatientCaseToReturnDto>>(patientCases);
 
