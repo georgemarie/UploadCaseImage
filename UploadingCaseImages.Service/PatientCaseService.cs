@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using UploadingCaseImages.DB.Model;
+using UploadingCaseImages.Service.Common;
 using UploadingCaseImages.Service.DTOs;
 using UploadingCaseImages.Service.Utilities;
 using UploadingCaseImages.UnitOfWorks;
@@ -22,7 +23,7 @@ public class PatientCaseService : IPatientCaseService
 		this._contextAccessor = contextAccessor;
 	}
 
-	public async Task<GenericResponseModel<IEnumerable<PatientCaseToReturnDto>>> GetPatientCaseAsync(GetPatientCaseDto dto)
+	public async Task<PageResponse<PatientCaseToReturnDto>> GetPatientCaseAsync(GetPatientCaseDto dto)
 	{
 		var query = _unitOfWork
 			.Repository<PatientCase>()
@@ -30,14 +31,19 @@ public class PatientCaseService : IPatientCaseService
 
 		query = ApplyFiltrationOnPatientCases(dto, query);
 
+		var totalRecords = await query.CountAsync();
+		query = query.Skip((dto.PageNumber - 1) * dto.PageSize).Take(dto.PageSize);
+
 		var patientCases = await query
 			.Include(a => a.Anatomy)
 			.Include(a => a.CaseImages)
 			.ToListAsync();
 
+		int actualPageSize = patientCases.Count;
+
 		var patientCasesDto = _mapper.Map<List<PatientCaseToReturnDto>>(patientCases);
 
-		return GenericResponseModel<IEnumerable<PatientCaseToReturnDto>>.Success(patientCasesDto);
+		return PageResponse<PatientCaseToReturnDto>.Success(dto.PageNumber, dto.PageSize, totalRecords, patientCasesDto);
 	}
 
 	private static IQueryable<PatientCase> ApplyFiltrationOnPatientCases(GetPatientCaseDto dto, IQueryable<PatientCase> query)
