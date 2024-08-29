@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using UploadingCaseImages.Service;
+using UploadingCaseImages.Service.Common;
 using UploadingCaseImages.Service.DTOs;
 
 namespace UploadingCaseImages.Controllers;
@@ -17,7 +18,7 @@ public class PatientCaseController : Controller
 	}
 
 	[HttpGet("GetPatientCase")]
-	[ProducesResponseType(typeof(GenericResponseModel<IEnumerable<PatientCaseToReturnDto>>), (int)HttpStatusCode.OK)]
+	[ProducesResponseType(typeof(PageResponse<PatientCaseToReturnDto>), (int)HttpStatusCode.OK)]
 	public async Task<IActionResult> GetPatientCase([FromQuery] GetPatientCaseDto dto)
 	{
 		return Ok(await _patientCaseService.GetPatientCaseAsync(dto));

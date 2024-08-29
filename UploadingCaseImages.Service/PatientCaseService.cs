@@ -34,9 +34,9 @@ public class PatientCaseService : IPatientCaseService
 		var patientCases = await query
 			.Include(a => a.Anatomy)
 			.Include(a => a.CaseImages)
+			.OrderByDescending(x => x.CreatedAt)
 			.Skip((dto.PageNumber - 1) * dto.PageSize)
 			.Take(dto.PageSize)
-			.OrderByDescending(x => x.CreatedAt)
 			.ToListAsync();
 
 		var patientCasesDto = _mapper.Map<List<PatientCaseToReturnDto>>(patientCases);
