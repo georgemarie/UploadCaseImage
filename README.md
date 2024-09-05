@@ -1,5 +1,6 @@
 # live server of the APIs link : 
 [Live Server](http://ec2-34-250-251-119.eu-west-1.compute.amazonaws.com/swagger/index.html)
+(Right-click and select "Open link in new tab")
 
 # Doctor portal: uploading case images
 
@@ -32,6 +33,7 @@
 ### 6. Current Doctor's Notes -- a free text field for the doctor to enter any comments. 
 ### 7. Current Visit date -- already captured from the system.
 
+# Refrence
 Reference UI / UX: 
 
 [View in Figma](https://www.figma.com/proto/5H2Jv0kV8yzr5tvb7mVdyU/LC-Doctor-Portal?page-id=1192%3A20110&type=design&node-id=1252-10940&viewport=1004%2C-2603%2C0.2&t=quDAkEKG8AyRe2JB-1&scaling=scale-down) 
