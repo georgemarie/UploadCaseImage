@@ -30,4 +30,5 @@
 ### 7. Current Visit date -- already captured from the system.
 
 Reference UI / UX: 
-(https://www.figma.com/proto/5H2Jv0kV8yzr5tvb7mVdyU/LC-Doctor-Portal?page-id=1192%3A20110&type=design&node-id=1252-10940&viewport=1004%2C-2603%2C0.2&t=quDAkEKG8AyRe2JB-1&scaling=scale-down)
+[View in Figma](https://www.figma.com/proto/5H2Jv0kV8yzr5tvb7mVdyU/LC-Doctor-Portal?page-id=1192%3A20110&type=design&node-id=1252-10940&viewport=1004%2C-2603%2C0.2&t=quDAkEKG8AyRe2JB-1&scaling=scale-down) 
+(Right-click and select "Open link in new tab")
