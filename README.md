@@ -1,6 +1,6 @@
 # Doctor portal: uploading case images
 
-# About Upload Case Images
+## About Upload Case Images
 
 ### As a doctor, I need to upload case images, select the anatomy, and to be able to view the history of the case
 
